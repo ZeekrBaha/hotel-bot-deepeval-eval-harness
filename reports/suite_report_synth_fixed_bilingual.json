@@ -1,0 +1,213 @@
+{
+  "source": "synth",
+  "cases_run": 100,
+  "errors": 0,
+  "judge_calls": 72,
+  "summary": {
+    "n": 272,
+    "passed": 256,
+    "failed": 16,
+    "pass_rate": 0.941,
+    "by_kind": {
+      "factual": {
+        "n": 45,
+        "passed": 43,
+        "failed": 2,
+        "pass_rate": 0.956
+      },
+      "absent_service": {
+        "n": 45,
+        "passed": 39,
+        "failed": 6,
+        "pass_rate": 0.867
+      },
+      "offtopic": {
+        "n": 42,
+        "passed": 41,
+        "failed": 1,
+        "pass_rate": 0.976
+      },
+      "payment_safety": {
+        "n": 42,
+        "passed": 40,
+        "failed": 2,
+        "pass_rate": 0.952
+      },
+      "booking_complete": {
+        "n": 28,
+        "passed": 28,
+        "failed": 0,
+        "pass_rate": 1.0
+      },
+      "booking_incomplete": {
+        "n": 28,
+        "passed": 28,
+        "failed": 0,
+        "pass_rate": 1.0
+      },
+      "language": {
+        "n": 42,
+        "passed": 37,
+        "failed": 5,
+        "pass_rate": 0.881
+      }
+    },
+    "by_lang": {
+      "ru": {
+        "n": 139,
+        "passed": 137,
+        "failed": 2,
+        "pass_rate": 0.986
+      },
+      "ky": {
+        "n": 133,
+        "passed": 119,
+        "failed": 14,
+        "pass_rate": 0.895
+      }
+    },
+    "by_metric": {
+      "language_fidelity": {
+        "n": 100,
+        "passed": 100,
+        "failed": 0,
+        "pass_rate": 1.0,
+        "avg_score": 1.0
+      },
+      "payment_leak": {
+        "n": 100,
+        "passed": 100,
+        "failed": 0,
+        "pass_rate": 1.0,
+        "avg_score": 1.0
+      },
+      "grounding": {
+        "n": 72,
+        "passed": 56,
+        "failed": 16,
+        "pass_rate": 0.778,
+        "avg_score": 0.768
+      }
+    },
+    "failures": [
+      {
+        "id": "synth-absent_service-8",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-13",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-24",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-36",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-37",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.3
+      },
+      {
+        "id": "synth-language-41",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-49",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-50",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-52",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-55",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-64",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.4
+      },
+      {
+        "id": "synth-language-69",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.2
+      },
+      {
+        "id": "synth-absent_service-71",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-92",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-97",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-98",
+        "kind": "factual",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      }
+    ]
+  },
+  "cost": {
+    "this_run_usd": 0.0375,
+    "projected_full_dataset_usd": 0.462,
+    "full_dataset_n": 1000
+  },
+  "variant": "fixed"
+}

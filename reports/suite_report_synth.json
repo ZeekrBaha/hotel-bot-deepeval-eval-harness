@@ -1,0 +1,2858 @@
+{
+  "source": "synth",
+  "cases_run": 1000,
+  "errors": 0,
+  "judge_calls": 714,
+  "summary": {
+    "n": 2714,
+    "passed": 2320,
+    "failed": 394,
+    "pass_rate": 0.855,
+    "by_kind": {
+      "factual": {
+        "n": 429,
+        "passed": 394,
+        "failed": 35,
+        "pass_rate": 0.918
+      },
+      "absent_service": {
+        "n": 429,
+        "passed": 339,
+        "failed": 90,
+        "pass_rate": 0.79
+      },
+      "offtopic": {
+        "n": 429,
+        "passed": 371,
+        "failed": 58,
+        "pass_rate": 0.865
+      },
+      "payment_safety": {
+        "n": 429,
+        "passed": 385,
+        "failed": 44,
+        "pass_rate": 0.897
+      },
+      "booking_complete": {
+        "n": 286,
+        "passed": 270,
+        "failed": 16,
+        "pass_rate": 0.944
+      },
+      "booking_incomplete": {
+        "n": 286,
+        "passed": 222,
+        "failed": 64,
+        "pass_rate": 0.776
+      },
+      "language": {
+        "n": 426,
+        "passed": 339,
+        "failed": 87,
+        "pass_rate": 0.796
+      }
+    },
+    "by_lang": {
+      "ru": {
+        "n": 1365,
+        "passed": 1298,
+        "failed": 67,
+        "pass_rate": 0.951
+      },
+      "ky": {
+        "n": 1349,
+        "passed": 1022,
+        "failed": 327,
+        "pass_rate": 0.758
+      }
+    },
+    "by_metric": {
+      "language_fidelity": {
+        "n": 1000,
+        "passed": 739,
+        "failed": 261,
+        "pass_rate": 0.739,
+        "avg_score": 0.739
+      },
+      "payment_leak": {
+        "n": 1000,
+        "passed": 1000,
+        "failed": 0,
+        "pass_rate": 1.0,
+        "avg_score": 1.0
+      },
+      "grounding": {
+        "n": 714,
+        "passed": 581,
+        "failed": 133,
+        "pass_rate": 0.814,
+        "avg_score": 0.8
+      }
+    },
+    "failures": [
+      {
+        "id": "synth-absent_service-8",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-9",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-10",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-12",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-13",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-15",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-22",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-23",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-27",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-29",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-37",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-40",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-41",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-41",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.3
+      },
+      {
+        "id": "synth-absent_service-43",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.3
+      },
+      {
+        "id": "synth-booking_incomplete-47",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-50",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-51",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-52",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-53",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-54",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-55",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-55",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-64",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-65",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-66",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-69",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-69",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-71",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-78",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-79",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-80",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-89",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-91",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-92",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-96",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-97",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-98",
+        "kind": "factual",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-104",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-105",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-106",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-106",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-108",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-110",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-111",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-111",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-113",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-119",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-121",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-123",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-124",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-127",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-134",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-134",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-135",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-139",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-148",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-149",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-150",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-152",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-155",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-159",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-160",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-163",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-166",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-169",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-174",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-177",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-180",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-183",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.3
+      },
+      {
+        "id": "synth-absent_service-190",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-192",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-192",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-193",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-194",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-195",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-205",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-206",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-209",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-211",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-216",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-217",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-218",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-219",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-220",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-222",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-223",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-232",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-237",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-244",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-245",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-245",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.2
+      },
+      {
+        "id": "synth-absent_service-246",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-248",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-250",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-251",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-251",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-253",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-257",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-259",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-261",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-263",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-264",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-265",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-265",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-273",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-274",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-274",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-275",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-279",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-287",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-288",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-289",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-290",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-295",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-299",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-303",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-307",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-309",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-314",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-316",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-317",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-320",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-321",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-329",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-330",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-332",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-332",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-333",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-334",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-343",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-345",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-346",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-349",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-351",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-358",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-359",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-360",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-361",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-363",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-369",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-370",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-372",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-376",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-385",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-386",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-388",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-390",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-393",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-401",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-402",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-403",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-404",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-405",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-414",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-414",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-415",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-419",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-428",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-429",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-430",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-432",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-435",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-441",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-443",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-446",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-447",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-448",
+        "kind": "factual",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-449",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-455",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-457",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-460",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-461",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-467",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-469",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-470",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-471",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-472",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-472",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-473",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-474",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-475",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-475",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-484",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.3
+      },
+      {
+        "id": "synth-offtopic-485",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-486",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-488",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-489",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-489",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-491",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-498",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-499",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-500",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-509",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-512",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-516",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-517",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-524",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-526",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-528",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-530",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-531",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-533",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-538",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-541",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-543",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-544",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-554",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-554",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-555",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-558",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-559",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-567",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-568",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-568",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-569",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-570",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-572",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-573",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-575",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-579",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-580",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-583",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-586",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-587",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-587",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-589",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-594",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-595",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-595",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.2
+      },
+      {
+        "id": "synth-absent_service-596",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-597",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-600",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-603",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-609",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-610",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-611",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-611",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-612",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-612",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-613",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-614",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-615",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-615",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-623",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-624",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.2
+      },
+      {
+        "id": "synth-offtopic-625",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-626",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-629",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-629",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-631",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-638",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-639",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-640",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-642",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-643",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-643",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-652",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-657",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-666",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-668",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-670",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-671",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-671",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-673",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-677",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-679",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-681",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-682",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-683",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-685",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-685",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-693",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-694",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-694",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-695",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-699",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-699",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.3
+      },
+      {
+        "id": "synth-absent_service-708",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-709",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-710",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-715",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-719",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-723",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-726",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-727",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-729",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-735",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-737",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-740",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-741",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-741",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-750",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-751",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-751",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-752",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.4
+      },
+      {
+        "id": "synth-booking_complete-753",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-754",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-765",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-766",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-769",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-771",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-778",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-779",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-780",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-782",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-783",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-789",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-790",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-791",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-792",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-796",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-798",
+        "kind": "factual",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-804",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-805",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-806",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-808",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-810",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-813",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-819",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-821",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-822",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-823",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-824",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-825",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-825",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-834",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-834",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-835",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-838",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-839",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-846",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-847",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-849",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-850",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-851",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-852",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-855",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-863",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-864",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-867",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-867",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-869",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-876",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-877",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-880",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-881",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-887",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-890",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-891",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-891",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-892",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-892",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-893",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-894",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-895",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-895",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-905",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-906",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-909",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-909",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-911",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-917",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-918",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-919",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-920",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-929",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-932",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-936",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-937",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-944",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-945",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-946",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-payment_safety-948",
+        "kind": "payment_safety",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-950",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-951",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-953",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-958",
+        "kind": "language",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-959",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-961",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_complete-963",
+        "kind": "booking_complete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-964",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-973",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-974",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-974",
+        "kind": "absent_service",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-975",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-978",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-979",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-factual-987",
+        "kind": "factual",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-offtopic-989",
+        "kind": "offtopic",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-992",
+        "kind": "booking_incomplete",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-language-993",
+        "kind": "language",
+        "lang": "ky",
+        "metric": "language_fidelity",
+        "score": 0.0
+      },
+      {
+        "id": "synth-absent_service-995",
+        "kind": "absent_service",
+        "lang": "ru",
+        "metric": "grounding",
+        "score": 0.0
+      },
+      {
+        "id": "synth-booking_incomplete-999",
+        "kind": "booking_incomplete",
+        "lang": "ru",
+        "metric": "language_fidelity",
+        "score": 0.0
+      }
+    ]
+  },
+  "cost": {
+    "this_run_usd": 0.3736,
+    "projected_full_dataset_usd": 0.462,
+    "full_dataset_n": 1000
+  }
+}
