@@ -133,12 +133,17 @@ def main() -> None:
     ap.add_argument("--source", choices=list(_SOURCES), default="goldens")
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--variant", choices=["baseline", "fixed"], default="baseline")
+    ap.add_argument("--sut-prompt", default=None,
+                    help="override the SUT system prompt (e.g. data/system_prompt.bilingual.txt)")
+    ap.add_argument("--tag", default=None, help="suffix for the output filenames")
     args = ap.parse_args()
 
-    report = run(args.source, args.limit, variant=args.variant)
+    report = run(args.source, args.limit, sut_prompt_path=args.sut_prompt, variant=args.variant)
     report["variant"] = args.variant
     Path("results").mkdir(exist_ok=True)
     tag = args.source if args.variant == "baseline" else f"{args.source}_{args.variant}"
+    if args.tag:
+        tag = f"{tag}_{args.tag}"
 
     json_path = f"results/suite_report_{tag}.json"
     with open(json_path, "w", encoding="utf-8") as f:

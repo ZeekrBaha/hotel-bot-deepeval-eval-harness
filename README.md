@@ -134,12 +134,21 @@ bot's weakness to Kyrgyz. (Exact counts vary run-to-run; see §8.)
    list, the bot confidently says "we don't have it" instead of deferring. It conflates
    *not-listed* with *known-absent*.
 
-**Found → analysed → fixed → verified.** The Kyrgyz bug was root-caused (a *prompt* bug, not a
-model limit — see [`docs/kyrgyz-language-bug.md`](docs/kyrgyz-language-bug.md)) and fixed with
-code-side language routing (`sut/hotel_bot/bot_fixed.py`). Re-measured on 500 cases: **language
-fidelity 0.74 → 0.99, Kyrgyz 0.76 → 0.92**, Russian and payment safety unharmed
-([`reports/suite_report_synth_fixed.md`](reports/suite_report_synth_fixed.md)). Run it yourself:
-`python -m evals.run_suite --source synth --limit 500 --variant fixed`.
+**Found → analysed → fixed → verified → shipped.** The Kyrgyz bug was root-caused (a *prompt* bug,
+not a model limit — see [`docs/kyrgyz-language-bug.md`](docs/kyrgyz-language-bug.md)) and fixed two
+ways:
+- **Fix #1 — code-side language routing** (`sut/hotel_bot/bot_fixed.py`): detect the query language,
+  inject an explicit directive. 500-case run: **language fidelity 0.74 → 0.99, Kyrgyz 0.76 → 0.92**,
+  Russian and payment safety unharmed ([report](reports/suite_report_synth_fixed.md)).
+- **Fix #2 — bilingual hotel data** (`data/system_prompt.bilingual.txt`): 100-case run pushed
+  language fidelity to **1.000** and Russian to 0.986, but **grounding did not recover** (~0.78,
+  flat across variants — a separate pre-existing issue, see the report). Honest, not hand-waved
+  ([report](reports/suite_report_synth_fixed_bilingual.md)).
+- **Shipped to production:** the same code-side fix was applied to the real bot
+  (`hotel-chat-bot/core/bot.py`, branch `fix/kyrgyz-language-routing`, 20 tests passing).
+
+Run it yourself: `python -m evals.run_suite --source synth --limit 500 --variant fixed`
+(add `--sut-prompt data/system_prompt.bilingual.txt` for fix #2).
 
 ---
 

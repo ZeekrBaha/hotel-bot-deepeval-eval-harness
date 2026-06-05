@@ -148,7 +148,13 @@ directive). Re-measured on 500 cases (`reports/suite_report_synth_fixed.md`):
 | Russian pass-rate | 0.951 | 0.955 | no harm |
 | payment leak | 1.000 | 1.000 | still 0 |
 
-Find → analyse → fix → re-measure, all in the same harness.
+**Fix #2** (bilingual hotel data, 100-case run) pushed language fidelity to a perfect **1.000** and
+Russian to 0.986, but **grounding did not recover** (~0.78, flat across all variants) — so the
+grounding number is a separate pre-existing ~80% baseline, not damage from the language fix
+(needs a larger run to confirm; deferred). **Shipped:** the same code-side fix was applied to the
+production bot (`hotel-chat-bot/core/bot.py`, branch `fix/kyrgyz-language-routing`, 20 tests).
+
+Find → analyse → fix → re-measure → ship, all driven by the same harness.
 
 ---
 

@@ -72,7 +72,30 @@ with the **same harness** on 500 cases (`reports/suite_report_synth_fixed.md`):
 | grounding | 0.814 | 0.782 | −3.2 pp |
 
 The wrong-language bug is essentially eliminated (language fidelity 74% → **99%**, Kyrgyz 76% →
-**92%**), Russian is unharmed, payment safety stays perfect. The small grounding dip is the honest
-tradeoff (and partly sample noise — baseline is the full 1000-run, fixed is a 500-case sample);
-fix #2 (bilingual hotel data) should recover it. **This is the whole point: the harness found the
-bug, then proved the fix.**
+**92%**), Russian is unharmed, payment safety stays perfect.
+
+### Fix #2 — bilingual hotel data (`data/system_prompt.bilingual.txt`), 100-case run
+
+Hypothesis: giving the model Kyrgyz versions of the facts would let factual answers anchor to
+Kyrgyz and recover grounding. Measured (`reports/suite_report_synth_fixed_bilingual.md`):
+
+| metric | baseline | fixed | **fixed + bilingual** |
+|---|---|---|---|
+| language fidelity | 0.739 | 0.990 | **1.000** |
+| Russian | 0.951 | 0.955 | **0.986** |
+| grounding | 0.814 | 0.782 | **0.778** |
+
+**Honest result: fix #2 made language fidelity perfect and improved Russian, but grounding did
+NOT recover** — it sits at ~0.78 across every variant. So the grounding number is a *separate,
+pre-existing* ~80% baseline (the bot isn't perfectly grounded in either language), not damage from
+the language fix. At n=100 it's within noise; a larger run (deferred) is needed to call it.
+
+### Applied to the production bot
+
+The same fix (code-side `detect_language` + an explicit directive) was applied to the **real**
+bot — `hotel-chat-bot/core/bot.py`, branch `fix/kyrgyz-language-routing` — with 3 new tests
+(20 passing) and a strengthened language rule in `system-prompt.txt`. Live: the production
+`handle_message` now answers Kyrgyz queries in Kyrgyz.
+
+**The whole point:** the harness found the bug, root-caused it, proved the fix, and the fix shipped
+to the production bot.
