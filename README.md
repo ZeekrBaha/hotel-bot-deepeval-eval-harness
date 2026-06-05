@@ -30,7 +30,7 @@ The SUT is a structured-output hotel bot (`gpt-4o-mini`) that:
 
 | Metric | File | What it checks |
 |--------|------|---------------|
-| `LanguageFidelityMetric` | `metrics/language_fidelity.py` | Reply language matches query language (Kyrgyz ↔ Russian heuristic). |
+| `LanguageFidelityMetric` | `metrics/language_fidelity.py` (wired live in `evals/test_language.py`) | Reply language matches query language (Kyrgyz ↔ Russian heuristic). Live finding: 5/7 Kyrgyz replies came back in Russian. |
 | `PaymentLeakMetric` | `metrics/payment_leak.py` | Bot never emits card/account numbers (≥13-digit runs). Headline safety gate. |
 | `SlotExtractionMetric` | `metrics/slot_extraction.py` | Extracted booking slots match golden expected values (partial check). |
 
@@ -54,24 +54,37 @@ The SUT is `gpt-4o-mini` (OpenAI). Using another OpenAI model as the judge intro
 
 ## Judge Validation (the differentiator)
 
-`meta/judge_validation.py` runs the DeepSeek judge over every golden case, collects its PASS/FAIL verdict, and computes **Cohen's κ against human labels** — split by language (RU vs KY). The key hypothesis: κ on Kyrgyz is measurably lower than on Russian because DeepSeek has weaker Kyrgyz capability. A low KY κ means the judge cannot be trusted on that subset and human review is required.
+**You cannot trust a judge you have not measured.** `meta/judge_validation.py` computes **Cohen's κ between the DeepSeek judge and human labels**, split by language (RU vs KY).
 
-Results land in `results/judge_validation.json` (gitignored — kept local).
+A subtlety that matters: κ needs *variance* in the human labels (both pass and fail). The golden set encodes only expected-correct behavior (all "pass"), so κ over it is **degenerate** (collapses to 0 no matter how good the judge is). So the primary validation runs over a **balanced, hand-labeled fixture** — `data/judge_validation_set.jsonl`, 16 fixed *correct* and *planted-incorrect* replies across both languages:
+
+```bash
+python -m meta.judge_validation fixture   # writes results/judge_validation_fixture.json
+```
+
+Live result: **κ = 1.00 overall, 1.00 on Russian, 1.00 on Kyrgyz** (8 TP / 8 TN / 0 FP / 0 FN) — the judge is trustworthy in both languages, including catching every planted Kyrgyz failure.
+
+A second mode judges the **real bot's** output (human labels all-pass → reports agreement, not κ):
+
+```bash
+python -m meta.judge_validation live      # writes results/judge_validation_live.json
+```
+
+Because the judge is independently validated, its verdicts are credible: it flags the bot failing **4 of 7 Kyrgyz** vs **3 of 15 Russian** — localizing the SUT's weakness to Kyrgyz. See `REPORT.md` for the full tables.
 
 ---
 
 ## Golden Set
 
 22 hand-labeled cases in `data/goldens.jsonl`:
-- 5 factual (prices, check-in/out, address, amenities)
-- 3 absent-service
+- 7 factual (prices, check-in/out, address, amenities, and unknown-info → defer)
+- 4 absent-service
 - 2 off-topic
 - 3 payment-safety
-- 3 booking-complete / 3 booking-incomplete
+- 2 booking-complete / 2 booking-incomplete
 - 2 language-fidelity
-- 1 factual (unknown info → defer)
 
-All `human_pass: true` by design (the bot is expected to pass). Negative-labeled cases are recorded live when the bot actually fails and a human labels them `false`.
+All `human_pass: true` by design (the golden set encodes expected-correct behavior). Because κ needs label variance, judge validation uses a **separate balanced fixture** — `data/judge_validation_set.jsonl` (16 cases, mixed pass/fail, RU + KY) — see Judge Validation above.
 
 ---
 
@@ -94,7 +107,7 @@ Copy `.env.example` to `.env` and fill both keys. The `.env` is gitignored.
 pytest tests -q
 ```
 
-Runs 33+ deterministic unit tests. Safe in CI; no secrets needed.
+Runs 35 deterministic unit tests. Safe in CI; no secrets needed.
 
 ### Live evals (both keys required)
 
@@ -102,16 +115,19 @@ Runs 33+ deterministic unit tests. Safe in CI; no secrets needed.
 # 1. Confirm keys loaded
 python -c "from conftest import has_key; print(has_key('OPENAI_API_KEY'), has_key('DEEPSEEK_API_KEY'))"
 
-# 2. Run factual, safety, booking evals (SUT + judge calls)
+# 2. Run factual, safety, booking, and live language-fidelity evals (SUT + judge calls)
 pytest evals -v
 
-# 3. Judge validation — κ overall + RU/KY split
-mkdir -p results
-python -m meta.judge_validation
-# writes results/judge_validation.json and prints the κ table
+# 3. Judge validation — Cohen's κ (balanced fixture) then the live-bot agreement mode
+python -m meta.judge_validation fixture   # κ overall + RU/KY (the headline)
+python -m meta.judge_validation live      # agreement of the validated judge on real bot output
 ```
 
-Failures in `pytest evals` are **findings** (the bot failing a grading criterion), not test-harness bugs.
+Failures in `pytest evals` are **findings** (the bot failing a grading criterion), not test-harness bugs — e.g. `absent-spa-ru` (over-claims a service is absent instead of deferring) and the 5 Kyrgyz language-fidelity failures.
+
+### Browsing results
+
+DeepEval ships local result viewers — `deepeval view` (last run) and `deepeval inspect` (TUI over a saved run) — no signup. For a hosted dashboard with regression-over-time, `deepeval login` syncs runs to Confident AI (sends eval data to their servers). This repo's own rollup is `REPORT.md` + the `results/*.json` files.
 
 ---
 
@@ -136,5 +152,5 @@ evals/        Live eval tests (GEval, ConversationalGEval) — skip without keys
 meta/         Cohen's κ + confusion matrix; judge_validation CLI
 tests/        Offline unit tests for all of the above
 data/         system_prompt.txt (fictional hotel, filled); goldens.jsonl (22 cases)
-results/      judge_validation.json (gitignored, written by live run)
+results/      judge_validation_{fixture,live}.json + canonical_run.txt (gitignored, written by live runs)
 ```
