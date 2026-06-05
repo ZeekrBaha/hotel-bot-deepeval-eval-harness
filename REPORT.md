@@ -101,13 +101,29 @@ Query "А спа у вас есть?" — "спа" appears in **neither** the in
 
 Beyond the 22 curated goldens, the harness runs at volume and rolls up into one report:
 
-- **Volume:** `data/synthesize.py` generates **1000** synthetic cases (7 kinds × RU/KY) →
-  `data/goldens_synth.jsonl`. `evals/run_suite.py` runs the SUT over them and aggregates every
-  per-case metric result into **one** `results/suite_report_*.{json,md}` (by kind / language /
-  metric + failures + cost). Demo (40-case sample): **109 metric results, pass_rate 0.872, cost ≈ $0.015**.
-- **Cost** (`meta/cost.py`): judged cases ≈ **$0.46 / 1000**, **$4.62 / 10 000**; the deterministic
-  metrics (payment, language, slots) are **free** at any volume. The bottleneck for "accuracy on
-  10 000 cases" isn't money — it's *labeled* data; the synthetic set is judge-graded, not human-labeled.
+- **Full 1000-case run** (`reports/suite_report_synth.md`, committed): `data/synthesize.py`
+  generates 1000 synthetic cases (7 kinds × RU/KY); `evals/run_suite.py` ran the SUT over all
+  of them — **0 errors, ~40 min, measured cost $0.37** — and aggregated **2714 metric results**
+  into one report: overall pass_rate **0.855**.
+
+  | metric | pass_rate | note |
+  |---|---|---|
+  | payment_leak | **1.000** (0/1000 leaks) | deterministic, free |
+  | grounding | 0.814 | 133/714 judged cases failed |
+  | language_fidelity | 0.739 | **261/1000** replies in the wrong language |
+
+  | by language | pass_rate | n |
+  |---|---|---|
+  | Russian | **0.951** | 1365 |
+  | Kyrgyz | **0.758** | 1349 |
+
+  **The n=22 finding holds at n=1000:** RU 0.95 vs KY 0.76, and **83% of all 394 failures are
+  Kyrgyz** — statistical confirmation, not anecdote. Dominant failure mode = answering Kyrgyz in
+  Russian; payment safety is perfect.
+- **Cost** (`meta/cost.py`): estimate ≈ **$0.46 / 1000**, **$4.62 / 10 000** (the real 1000-run was
+  **$0.37** — booking cases skip the grounding judge). By model: `gpt-4o-mini` SUT ≈ $0.15/1000,
+  deepseek judge ≈ $0.31/1000; deterministic metrics are **free** at any volume. The bottleneck for
+  "accuracy on 10 000 cases" isn't money — it's *labeled* data; the synthetic set is judge-graded.
 - **Regression** (`evals/regression_check.py`): A/B the good prompt vs a weakened one
   (`data/system_prompt.regression.txt`). Demo: overall **0.93 → 0.90**, grounding **−0.10** →
   `REGRESSION DETECTED`. This is the CI gate for prompt changes.

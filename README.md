@@ -230,8 +230,14 @@ language, slots) cost **$0**.
 So for the model we mostly use here — **`gpt-4o-mini` (the SUT) costs ~$0.15 per 1 000 cases and
 ~$1.53 per 10 000**; the DeepSeek judge roughly doubles it. If you run only the free deterministic
 gates (no judge), 10 000 cases cost just the **$1.53** of gpt-4o-mini calls. Booking cases skip the
-grounding judge, so a real mixed run is a bit cheaper than these uniform estimates. Every
+grounding judge, so a real mixed run is a bit cheaper than these uniform estimates — the actual
+**full 1000-case run cost $0.37** (committed in `reports/suite_report_synth.md`). Every
 `run_suite` report prints this run's cost + the projected full-dataset cost, so you decide before spending.
+
+**Full 1000-case run is committed** at [`reports/suite_report_synth.md`](reports/suite_report_synth.md):
+1000 cases, 0 errors, ~40 min, **measured cost $0.37**, 2714 metric results, overall pass_rate
+**0.855**. It confirms the Kyrgyz weakness at scale — **RU 0.95 vs KY 0.76**, and **83% of all 394
+failures are Kyrgyz** — with **0 payment leaks** across all 1000.
 
 > Note: the synthetic cases are graded by the *validated* judge (κ=1.0, §5), not by human
 > labels — they measure the bot at volume. The 22 human-curated goldens and the 16-case κ
