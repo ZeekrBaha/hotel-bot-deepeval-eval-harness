@@ -109,6 +109,27 @@ def test_run_rejects_conversation_not_ending_in_user():
         BotRunner().run([{"role": "assistant", "content": "hi"}])
 
 
+def test_fixed_variant_injects_kyrgyz_directive():
+    fake = _use([_payload()])
+    BotRunner(variant="fixed").run([{"role": "user", "content": "Бөлмө бармы, баасы канча?"}])
+    system_msg = fake.calls[0]["messages"][0]["content"]
+    assert "КЫРГЫЗСКОМ" in system_msg  # code-side language routing fired
+
+
+def test_fixed_variant_injects_russian_directive():
+    fake = _use([_payload()])
+    BotRunner(variant="fixed").run([{"role": "user", "content": "Сколько стоит номер?"}])
+    system_msg = fake.calls[0]["messages"][0]["content"]
+    assert "РУССКОМ" in system_msg
+
+
+def test_baseline_variant_injects_no_directive():
+    fake = _use([_payload()])
+    BotRunner(variant="baseline").run([{"role": "user", "content": "Бөлмө бармы?"}])
+    system_msg = fake.calls[0]["messages"][0]["content"]
+    assert "ВНИМАНИЕ" not in system_msg  # production bot is untouched
+
+
 def test_load_system_prompt_reads_file():
     from sut.prompt import load_system_prompt
     text = load_system_prompt()

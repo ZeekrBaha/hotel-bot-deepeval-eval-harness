@@ -61,7 +61,7 @@ def _row(case, metric_name, metric) -> dict:
 
 
 def run(source: str = "goldens", limit: int | None = None,
-        sut_prompt_path: str | None = None) -> dict:
+        sut_prompt_path: str | None = None, variant: str = "baseline") -> dict:
     cases = load_goldens(Path(_SOURCES[source]))
     if limit is not None:
         cases = cases[:limit]
@@ -73,7 +73,7 @@ def run(source: str = "goldens", limit: int | None = None,
         import os
         os.environ["SYSTEM_PROMPT_PATH"] = sut_prompt_path
         bot.get_system_prompt.cache_clear()
-    runner = BotRunner()
+    runner = BotRunner(variant=variant)
     grounding = _grounding_metric()  # one instance: evaluation steps generated once
 
     rows: list[dict] = []
@@ -132,23 +132,26 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", choices=list(_SOURCES), default="goldens")
     ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--variant", choices=["baseline", "fixed"], default="baseline")
     args = ap.parse_args()
 
-    report = run(args.source, args.limit)
+    report = run(args.source, args.limit, variant=args.variant)
+    report["variant"] = args.variant
     Path("results").mkdir(exist_ok=True)
+    tag = args.source if args.variant == "baseline" else f"{args.source}_{args.variant}"
 
-    json_path = f"results/suite_report_{args.source}.json"
+    json_path = f"results/suite_report_{tag}.json"
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
 
     md = aggregate.to_markdown(report["summary"],
-                               title=f"Suite report — {args.source} ({report['cases_run']} cases)")
+                               title=f"Suite report — {args.source} / {args.variant} ({report['cases_run']} cases)")
     md += (f"\n\n## Cost\n\n- this run: **${report['cost']['this_run_usd']}** "
            f"({report['cases_run']} SUT calls + {report['judge_calls']} judge calls)\n"
            f"- projected for full `{args.source}` dataset "
            f"({report['cost']['full_dataset_n']} cases): "
            f"**${report['cost']['projected_full_dataset_usd']}**\n")
-    md_path = f"results/suite_report_{args.source}.md"
+    md_path = f"results/suite_report_{tag}.md"
     Path(md_path).write_text(md, encoding="utf-8")
 
     print(f"\nwrote {json_path} and {md_path}")
