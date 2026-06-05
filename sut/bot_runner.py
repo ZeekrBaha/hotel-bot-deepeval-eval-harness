@@ -1,39 +1,24 @@
-"""DB-free re-implementation of the hotel bot's single model call, for evaluation.
+"""Driver for the vendored hotel bot (the SUT).
 
-Mirrors hotel-chat-bot/core/bot.py: strict JSON schema, CONTEXT_WINDOW history,
-reply + is_booking_intent fallbacks. No Supabase, no daily-limit, no networking
-except through the injected LLMClient.
+`BotRunner` adapts the production `handle_message` (single message + db-managed
+history) to the harness's `run(messages)` interface: it resets the in-memory db,
+seeds the scripted prior turns, then sends the final user message through the REAL
+bot and maps the result dict to a `BotOutput`. No re-implementation of bot logic
+lives here — the logic is in `sut/hotel_bot/bot.py`.
 """
-import json
+import os
 from dataclasses import dataclass
+from pathlib import Path
 
-from sut.llm_client import LLMClient
+from sut.hotel_bot import bot, db
 
-CONTEXT_WINDOW = 10
-BOOKING_KEYWORDS = ["забронировать", "бронь", "свободен", "хочу номер",
-                    "book", "reserve", "бронирование"]
-_FALLBACK_REPLY = "Извините, не могу ответить на этот вопрос."
-
-_nullable_str = {"anyOf": [{"type": "string"}, {"type": "null"}]}
-_nullable_int = {"anyOf": [{"type": "integer"}, {"type": "null"}]}
-RESPONSE_SCHEMA = {
-    "name": "hotel_bot_response",
-    "strict": True,
-    "schema": {
-        "type": "object",
-        "properties": {
-            "reply": {"type": "string"},
-            "is_booking_intent": {"type": "boolean"},
-            "guest_name": _nullable_str,
-            "check_in": _nullable_str,
-            "check_out": _nullable_str,
-            "num_guests": _nullable_int,
-        },
-        "required": ["reply", "is_booking_intent", "guest_name",
-                     "check_in", "check_out", "num_guests"],
-        "additionalProperties": False,
-    },
-}
+# Point the vendored bot at the harness's filled system prompt (it reads
+# SYSTEM_PROMPT_PATH). setdefault so an explicit env override still wins. This also
+# covers non-pytest entry points (e.g. `python -m meta.judge_validation`).
+os.environ.setdefault(
+    "SYSTEM_PROMPT_PATH",
+    str(Path(__file__).resolve().parent.parent / "data" / "system_prompt.txt"),
+)
 
 
 @dataclass
@@ -51,35 +36,25 @@ class BotOutput:
                    (self.guest_name, self.check_in, self.check_out, self.num_guests))
 
 
-def _keyword_intent(text: str) -> bool:
-    low = text.lower()
-    return any(kw in low for kw in BOOKING_KEYWORDS)
-
-
 class BotRunner:
-    def __init__(self, system_prompt: str, llm: LLMClient):
-        self.system_prompt = system_prompt
-        self.llm = llm
+    def __init__(self, platform: str = "whatsapp", sender_id: str = "eval-user"):
+        self.platform = platform
+        self.sender_id = sender_id
 
     def run(self, messages: list[dict]) -> BotOutput:
-        sent = [{"role": "system", "content": self.system_prompt},
-                *messages[-CONTEXT_WINDOW:]]
-        raw = self.llm.complete(sent, RESPONSE_SCHEMA)
-        try:
-            parsed = json.loads(raw)
-        except (json.JSONDecodeError, TypeError):
-            parsed = {}
+        if not messages or messages[-1].get("role") != "user":
+            raise ValueError("conversation must end with a user message")
+        *prior, last = messages
 
-        last_user = next((m["content"] for m in reversed(messages)
-                          if m.get("role") == "user"), "")
-        intent = parsed.get("is_booking_intent", _keyword_intent(last_user)) \
-            if parsed else _keyword_intent(last_user)
+        db.reset()
+        db.set_history(self.platform, self.sender_id, prior)
+        result = bot.handle_message(self.platform, self.sender_id, last["content"])
 
         return BotOutput(
-            reply=(parsed.get("reply") or _FALLBACK_REPLY),
-            is_booking_intent=bool(intent),
-            guest_name=parsed.get("guest_name"),
-            check_in=parsed.get("check_in"),
-            check_out=parsed.get("check_out"),
-            num_guests=parsed.get("num_guests"),
+            reply=result["reply"],
+            is_booking_intent=result["is_booking_intent"],
+            guest_name=result.get("guest_name"),
+            check_in=result.get("check_in"),
+            check_out=result.get("check_out"),
+            num_guests=result.get("num_guests"),
         )

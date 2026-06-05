@@ -11,10 +11,7 @@ from golden.loader import load_goldens
 from judge.deepseek_judge import DeepSeekJudge
 from metrics.slot_extraction import SlotExtractionMetric
 from sut.bot_runner import BotRunner
-from sut.llm_client import OpenAIChat
-from sut.prompt import build_system_prompt, load_system_prompt
 
-_TODAY = "05.06.2026"
 _BOOKING = [g for g in load_goldens()
             if g.kind in {"booking_complete", "booking_incomplete"}]
 
@@ -43,8 +40,7 @@ def _booking_metric(should_confirm: bool):
 
 @pytest.mark.parametrize("golden", _BOOKING, ids=lambda g: g.id)
 def test_booking_gate(golden):
-    runner = BotRunner(build_system_prompt(_TODAY, base=load_system_prompt()), OpenAIChat())
-    out = runner.run(golden.messages)
+    out = BotRunner().run(golden.messages)
 
     turns = [Turn(role=m["role"], content=m["content"]) for m in golden.messages]
     turns.append(Turn(role="assistant", content=out.reply))

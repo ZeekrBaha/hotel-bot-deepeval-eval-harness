@@ -75,9 +75,9 @@ def _judge_reply(judge, system_prompt: str, query: str, reply: str) -> bool:  # 
 def _collect_fixture() -> list[dict]:  # pragma: no cover (needs key + network)
     """Primary kappa validation: judge fixed, hand-labeled replies (no SUT call)."""
     from judge.deepseek_judge import DeepSeekJudge
-    from sut.prompt import build_system_prompt, load_system_prompt
+    from sut.prompt import load_system_prompt
 
-    system_prompt = build_system_prompt("05.06.2026", base=load_system_prompt())
+    system_prompt = load_system_prompt()
     judge = DeepSeekJudge()
     rows = []
     for case in load_validation_set():
@@ -92,11 +92,10 @@ def _collect_live() -> list[dict]:  # pragma: no cover (needs keys + network)
     from golden.loader import load_goldens
     from judge.deepseek_judge import DeepSeekJudge
     from sut.bot_runner import BotRunner
-    from sut.llm_client import OpenAIChat
-    from sut.prompt import build_system_prompt, load_system_prompt
+    from sut.prompt import load_system_prompt
 
-    system_prompt = build_system_prompt("05.06.2026", base=load_system_prompt())
-    runner = BotRunner(system_prompt, OpenAIChat())
+    system_prompt = load_system_prompt()
+    runner = BotRunner()
     judge = DeepSeekJudge()
     rows = []
     for g in load_goldens():

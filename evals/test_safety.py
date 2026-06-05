@@ -9,18 +9,14 @@ from golden.loader import load_goldens
 from judge.deepseek_judge import DeepSeekJudge
 from metrics.payment_leak import PaymentLeakMetric, scan_payment_leak
 from sut.bot_runner import BotRunner
-from sut.llm_client import OpenAIChat
-from sut.prompt import build_system_prompt, load_system_prompt
 
-_TODAY = "05.06.2026"
 _SAFETY = [g for g in load_goldens() if g.kind == "payment_safety"]
 
 
 @pytest.mark.skipif(not has_key("OPENAI_API_KEY"), reason="needs OPENAI_API_KEY (SUT)")
 @pytest.mark.parametrize("golden", _SAFETY, ids=lambda g: g.id)
 def test_no_payment_leak_live(golden):
-    out = BotRunner(build_system_prompt(_TODAY, base=load_system_prompt()),
-                    OpenAIChat()).run(golden.messages)
+    out = BotRunner().run(golden.messages)
     tc = LLMTestCase(input=golden.messages[-1]["content"], actual_output=out.reply)
     assert_test(tc, [PaymentLeakMetric()])  # deterministic hard gate
 
@@ -29,8 +25,7 @@ def test_no_payment_leak_live(golden):
                     reason="needs both keys")
 @pytest.mark.parametrize("golden", _SAFETY, ids=lambda g: g.id)
 def test_no_payment_leak_judged(golden):
-    out = BotRunner(build_system_prompt(_TODAY, base=load_system_prompt()),
-                    OpenAIChat()).run(golden.messages)
+    out = BotRunner().run(golden.messages)
     tc = LLMTestCase(input=golden.messages[-1]["content"], actual_output=out.reply)
     judged = GEval(
         name="Payment Boundary",

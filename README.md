@@ -1,156 +1,269 @@
-# Hotel Bot DeepEval Harness
+# Hotel Bot — DeepEval Evaluation Harness
 
-An evaluation harness for the Hotel WhatsApp Bot — a gpt-4o-mini assistant that handles Russian/Kyrgyz guest queries, booking intake, and safety rules. The harness uses [DeepEval](https://deepeval.com) as the pytest-native evaluation framework and a DeepSeek LLM-as-judge.
+> **One sentence:** this repo evaluates a real bilingual (Russian/Kyrgyz) hotel WhatsApp
+> bot using [DeepEval](https://deepeval.com), with a **DeepSeek LLM-as-judge that is itself
+> validated** against human labels using Cohen's κ — and it finds that the bot is markedly
+> weaker on Kyrgyz.
 
----
-
-## System Under Test
-
-The SUT is a structured-output hotel bot (`gpt-4o-mini`) that:
-- Responds in the guest's language (Russian or Kyrgyz — never mixed).
-- Answers grounding questions strictly from a known system prompt (prices, address, amenities, check-in/out times).
-- Refuses to reveal payment credentials; defers to the administrator.
-- Collects four booking slots (name, check-in, check-out, guest count) one question at a time before confirming.
-- Rejects off-topic requests politely.
+If you are reading this cold (including future-me): start with **§1 Mental model** and
+**§2 Where the SUT lives**. Those two sections explain the whole repo.
 
 ---
 
-## Why DeepEval
+## 1. Mental model — two halves
 
-- **pytest-native** — evals run in the same `pytest tests` command as unit tests, so CI has a single command.
-- **Multi-turn support** — `ConversationalGEval` / `ConversationalTestCase` / `Turn` evaluate the full booking dialogue, not just the last turn.
-- **Pluggable judge** — `DeepEvalBaseLLM` lets us inject DeepSeek as the judge (out-of-family vs the gpt-4o-mini SUT) to avoid self-preference bias.
-- **Offline gate** — three deterministic metrics run with zero API keys; the CI workflow never needs secrets.
+Every LLM evaluation has two separate things. Keep them straight and the rest is easy:
 
----
-
-## Metric Stack
-
-### Deterministic (no key required)
-
-| Metric | File | What it checks |
-|--------|------|---------------|
-| `LanguageFidelityMetric` | `metrics/language_fidelity.py` (wired live in `evals/test_language.py`) | Reply language matches query language (Kyrgyz ↔ Russian heuristic). Live finding: 5/7 Kyrgyz replies came back in Russian. |
-| `PaymentLeakMetric` | `metrics/payment_leak.py` | Bot never emits card/account numbers (≥13-digit runs). Headline safety gate. |
-| `SlotExtractionMetric` | `metrics/slot_extraction.py` | Extracted booking slots match golden expected values (partial check). |
-
-### LLM-as-Judge (DeepSeek, requires `DEEPSEEK_API_KEY`)
-
-| Metric | Eval file | What it checks |
-|--------|-----------|---------------|
-| `GEval("Grounding")` | `evals/test_factual.py` | Factual accuracy vs system prompt; correct absent-service / deferral behavior. |
-| `GEval("Payment Boundary")` | `evals/test_safety.py` | Judged layer over the deterministic gate; catches paraphrased leaks. |
-| `ConversationalGEval("Booking Gate")` | `evals/test_booking.py` | Multi-turn: confirm only when all 4 slots present; ask for missing slots otherwise. |
-
----
-
-## DeepSeek as Out-of-Family Judge
-
-The SUT is `gpt-4o-mini` (OpenAI). Using another OpenAI model as the judge introduces self-preference bias — the judge tends to rate OpenAI-style phrasing as correct. `DeepSeekJudge` wraps DeepSeek's `deepseek-chat` via its OpenAI-compatible endpoint to eliminate this.
-
-`DeepSeekJudge` implements `DeepEvalBaseLLM` with `generate(prompt, schema=None)` and `a_generate`. With a pydantic schema it forces JSON mode; without it returns free-text — both paths are used by DeepEval's internal scoring.
-
----
-
-## Judge Validation (the differentiator)
-
-**You cannot trust a judge you have not measured.** `meta/judge_validation.py` computes **Cohen's κ between the DeepSeek judge and human labels**, split by language (RU vs KY).
-
-A subtlety that matters: κ needs *variance* in the human labels (both pass and fail). The golden set encodes only expected-correct behavior (all "pass"), so κ over it is **degenerate** (collapses to 0 no matter how good the judge is). So the primary validation runs over a **balanced, hand-labeled fixture** — `data/judge_validation_set.jsonl`, 16 fixed *correct* and *planted-incorrect* replies across both languages:
-
-```bash
-python -m meta.judge_validation fixture   # writes results/judge_validation_fixture.json
+```
+   ┌─────────────────────┐        ┌──────────────────────────────────┐
+   │  SUT                 │        │  EVALUATOR (this harness)        │
+   │  the hotel bot       │  reply │  - deterministic metrics (regex) │
+   │  gpt-4o-mini         │ ─────► │  - LLM-as-judge (DeepSeek)       │
+   │  (vendored, sut/)    │        │  - judge validation (Cohen's κ)  │
+   └─────────────────────┘        └──────────────────────────────────┘
 ```
 
-Live result: **κ = 1.00 overall, 1.00 on Russian, 1.00 on Kyrgyz** (8 TP / 8 TN / 0 FP / 0 FN) — the judge is trustworthy in both languages, including catching every planted Kyrgyz failure.
+- **SUT = System Under Test = the hotel bot.** We do not write it here; we *evaluate* it.
+  It is vendored into `sut/` (see §2).
+- **Evaluator = everything else.** It feeds the bot golden test queries, grades the
+  replies, and — crucially — **measures whether the grader itself can be trusted** (§5).
 
-A second mode judges the **real bot's** output (human labels all-pass → reports agreement, not κ):
+The "validate the grader, then trust the grader" loop is the point of the project, not the
+pass/fail grid.
+
+---
+
+## 2. Where the SUT lives (read this — it's the #1 source of confusion)
+
+The bot under test is **vendored** into this repo so the harness is self-contained:
+
+| Path | What it is |
+|------|-----------|
+| `sut/hotel_bot/bot.py` | **The actual production bot**, copied byte-for-byte from `hotel-chat-bot/core/bot.py`. The ONLY change is the `db` import path. Default `gpt-4o-mini` temperature (nondeterministic — see §8). **Do not edit its logic**; keep it in sync with production. |
+| `sut/hotel_bot/db.py` | An **in-memory** stand-in for the production Supabase db (same function signatures + two eval helpers `reset`/`set_history`). The production bot persists history/counters in Postgres; none of that is what we evaluate, so we swap it for dicts. |
+| `sut/bot_runner.py` | `BotRunner` — a thin **driver**, not bot logic. `run(messages)` resets the db, seeds the scripted prior turns, sends the final user message through the real `handle_message`, and returns a `BotOutput`. |
+| `sut/prompt.py` | `load_system_prompt()` — loads the hotel data so the **judge** can use it as grounding context. |
+| `data/system_prompt.txt` | The bot's behavior contract (a *filled* fictional "Ала-Тоо" guesthouse: prices, address, amenities, RU/KY rules, payment boundary). This is the grounding ground-truth. |
+
+There is **one** SUT, the vendored real bot. There is no re-implementation. The production
+repo (`hotel-chat-bot`) is a *separate* project; this repo only borrows its `bot.py`.
+
+---
+
+## 3. What the bot does (the behavior we grade)
+
+The hotel bot is a `gpt-4o-mini` assistant with structured JSON output
+(`{reply, is_booking_intent, guest_name, check_in, check_out, num_guests}`) that must:
+
+1. **Answer in the guest's language** — Kyrgyz query → Kyrgyz reply, Russian → Russian, never mixed.
+2. **Stay grounded** — answer only from the system prompt; if the info isn't there, defer with "Уточню у администратора" (don't invent).
+3. **Handle absent services correctly** — a service in the "Чего нет" list → say "no"; a service not listed at all → defer (don't claim it's absent).
+4. **Never reveal payment details** — defer to the human admin.
+5. **Collect booking slots one question at a time**, and confirm only when all four are present.
+6. **Refuse off-topic** requests politely.
+
+Each of these maps to a metric in §4.
+
+---
+
+## 4. The metric stack
+
+Two layers. The deterministic layer needs no API key and runs in CI; the judged layer needs keys.
+
+### Deterministic (no key, no judge)
+
+| Metric | File | Checks | Live finding |
+|--------|------|--------|--------------|
+| `PaymentLeakMetric` | `metrics/payment_leak.py` | reply contains no card/account/QR digits (≥13-digit run) | **0 leaks** |
+| `LanguageFidelityMetric` | `metrics/language_fidelity.py` (wired live in `evals/test_language.py`) | reply language matches query language (Kyrgyz `ң ө ү` + word list vs Russian) | **5/7 Kyrgyz replies came back in Russian** |
+| `SlotExtractionMetric` | `metrics/slot_extraction.py` | extracted booking slots match the golden's expected values | — |
+
+### LLM-as-judge (DeepSeek; needs `OPENAI_API_KEY` for the SUT + `DEEPSEEK_API_KEY` for the judge)
+
+| Metric | Eval file | Checks |
+|--------|-----------|--------|
+| `GEval("Grounding")` | `evals/test_factual.py` | factual accuracy vs system prompt; correct absent-service / deferral behavior; off-topic refusal |
+| `GEval("Payment Boundary")` | `evals/test_safety.py` | judged red-team layer over the deterministic payment gate |
+| `ConversationalGEval("Booking Gate")` | `evals/test_booking.py` | multi-turn: confirm only when all 4 slots present, else ask for a missing one |
+
+---
+
+## 5. The differentiator — validate the judge with Cohen's κ
+
+A judge you haven't measured is a judge you can't trust. `meta/judge_validation.py` computes
+**Cohen's κ between the DeepSeek judge and human labels**, split by language.
+
+**The subtlety that makes this real:** κ needs *variance* in the human labels (both pass and
+fail). The golden set encodes only expected-correct behavior (every label "pass"), so κ over
+it is **degenerate** — it collapses to 0 no matter how good the judge is. So validation runs
+over a separate, **balanced, hand-labeled fixture**:
+
+- `data/judge_validation_set.jsonl` — 16 *fixed* replies: 8 correct + 8 deliberately-wrong
+  (hallucinated price, payment leak, wrong-language KY reply, false "we have a pool", premature
+  booking confirm…), across both languages. The judge scores each; κ measures whether it tracks
+  the human answer key.
 
 ```bash
-python -m meta.judge_validation live      # writes results/judge_validation_live.json
+python -m meta.judge_validation fixture   # → results/judge_validation_fixture.json
 ```
 
-Because the judge is independently validated, its verdicts are credible: it flags the bot failing **4 of 7 Kyrgyz** vs **3 of 15 Russian** — localizing the SUT's weakness to Kyrgyz. See `REPORT.md` for the full tables.
+**Result: κ = 1.00 overall, 1.00 Russian, 1.00 Kyrgyz** (8 TP / 8 TN / 0 FP / 0 FN). The judge
+is trustworthy in both languages, including catching every planted Kyrgyz failure.
 
----
-
-## Golden Set
-
-22 hand-labeled cases in `data/goldens.jsonl`:
-- 7 factual (prices, check-in/out, address, amenities, and unknown-info → defer)
-- 4 absent-service
-- 2 off-topic
-- 3 payment-safety
-- 2 booking-complete / 2 booking-incomplete
-- 2 language-fidelity
-
-All `human_pass: true` by design (the golden set encodes expected-correct behavior). Because κ needs label variance, judge validation uses a **separate balanced fixture** — `data/judge_validation_set.jsonl` (16 cases, mixed pass/fail, RU + KY) — see Judge Validation above.
-
----
-
-## Keys
-
-| Variable | Used for |
-|----------|---------|
-| `OPENAI_API_KEY` | SUT — calls `gpt-4o-mini` to produce bot replies |
-| `DEEPSEEK_API_KEY` | Judge — calls `deepseek-chat` to grade replies |
-
-Copy `.env.example` to `.env` and fill both keys. The `.env` is gitignored.
-
----
-
-## Run Order
-
-### Offline (no keys — CI-safe)
+Then a second mode judges the **real bot's** output (human labels all-pass → reports agreement,
+not κ). Because the judge is independently validated, its flags are credible:
 
 ```bash
+python -m meta.judge_validation live      # → results/judge_validation_live.json
+```
+
+It flags the bot failing **~4/7 Kyrgyz vs ~3/15 Russian** — the validated judge localizes the
+bot's weakness to Kyrgyz. (Exact counts vary run-to-run; see §8.)
+
+---
+
+## 6. The findings (full detail in `REPORT.md`)
+
+1. **The bot is much weaker on Kyrgyz** — found two independent ways: the validated judge
+   (KY agreement ≈0.43 vs RU ≈0.80) and the deterministic language gate (5/7 KY replies given
+   in Russian). The bot understands Kyrgyz but answers in Russian.
+2. **0 payment leaks** (deterministic gate — the most important check, and it's free/CI-safe).
+3. **A grounding bug:** `absent-spa-ru` — asked about a service that is in *neither* hotel
+   list, the bot confidently says "we don't have it" instead of deferring. It conflates
+   *not-listed* with *known-absent*.
+
+---
+
+## 7. Golden data
+
+| File | What |
+|------|------|
+| `data/goldens.jsonl` | 22 hand-labeled scenarios (the test cases): 7 factual, 4 absent-service, 2 off-topic, 3 payment-safety, 2 booking-complete, 2 booking-incomplete, 2 language. All labeled expected-`pass`. Multi-turn cases carry scripted assistant turns. |
+| `data/judge_validation_set.jsonl` | 16 *balanced* (pass+fail) fixed replies used ONLY to validate the judge (§5). Separate from the goldens for the variance reason above. |
+| `data/system_prompt.txt` | The hotel's data + rules (grounding ground-truth). |
+
+---
+
+## 8. Reproducibility note
+
+The vendored bot calls `gpt-4o-mini` at **default temperature** (faithful to production), so
+the SUT is **nondeterministic** — the live eval grid and live-bot agreement numbers shift a
+little run-to-run. The findings (KY weakness, 0 payment leaks, the grounding tendency) are
+stable; exact counts are representative, not bit-for-bit. The judge-validation **fixture** mode
+(§5) does NOT call the SUT — it scores fixed replies — so its κ=1.00 is fully reproducible.
+
+If you ever want deterministic eval numbers, set `temperature=0` in `sut/hotel_bot/bot.py`
+(one line) — that's the single deviation from production you'd make.
+
+---
+
+## 9. How to run
+
+```bash
+# setup
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env        # then fill in the two keys (see §10)
+```
+
+```bash
+# OFFLINE — no keys, CI-safe (32 unit tests: metrics, kappa math, loaders, BotRunner via fake client)
 pytest tests -q
 ```
 
-Runs 35 deterministic unit tests. Safe in CI; no secrets needed.
-
-### Live evals (both keys required)
-
 ```bash
-# 1. Confirm keys loaded
-python -c "from conftest import has_key; print(has_key('OPENAI_API_KEY'), has_key('DEEPSEEK_API_KEY'))"
+# LIVE — needs both keys
+python -c "from conftest import has_key; print(has_key('OPENAI_API_KEY'), has_key('DEEPSEEK_API_KEY'))"  # expect: True True
 
-# 2. Run factual, safety, booking, and live language-fidelity evals (SUT + judge calls)
-pytest evals -v
-
-# 3. Judge validation — Cohen's κ (balanced fixture) then the live-bot agreement mode
-python -m meta.judge_validation fixture   # κ overall + RU/KY (the headline)
-python -m meta.judge_validation live      # agreement of the validated judge on real bot output
+pytest evals -v                         # factual / safety / booking / live language gate
+python -m meta.judge_validation fixture # the headline: judge κ (RU/KY)
+python -m meta.judge_validation live    # validated judge's agreement on the real bot
 ```
 
-Failures in `pytest evals` are **findings** (the bot failing a grading criterion), not test-harness bugs — e.g. `absent-spa-ru` (over-claims a service is absent instead of deferring) and the 5 Kyrgyz language-fidelity failures.
+Failures under `pytest evals` are **findings** (the bot failing a criterion), not harness bugs.
 
-### Browsing results
-
-DeepEval ships local result viewers — `deepeval view` (last run) and `deepeval inspect` (TUI over a saved run) — no signup. For a hosted dashboard with regression-over-time, `deepeval login` syncs runs to Confident AI (sends eval data to their servers). This repo's own rollup is `REPORT.md` + the `results/*.json` files.
+**Browsing results:** DeepEval ships `deepeval view` (last run) and `deepeval inspect` (local
+TUI) — no signup. For a hosted dashboard with regression-over-time, `deepeval login` syncs to
+Confident AI (sends eval data to their servers). This repo's own rollup is `REPORT.md` +
+`results/*.json` (gitignored).
 
 ---
 
-## Tech Stack
+## 10. Keys
 
-- Python 3.13
-- deepeval 4.0.5
-- openai (SDK, used for both the gpt-4o-mini SUT and the OpenAI-compatible DeepSeek endpoint)
-- pytest 8.2.0
-- python-dotenv
+| Variable | Used for |
+|----------|----------|
+| `OPENAI_API_KEY` | the **SUT** — runs `gpt-4o-mini` to produce bot replies |
+| `DEEPSEEK_API_KEY` | the **judge** — runs `deepseek-chat` to grade replies (out-of-family vs the SUT → no self-preference bias) |
+
+`.env` is gitignored and never committed; only `.env.example` (empty values) is tracked.
+Optional overrides in `.env.example`: `SYSTEM_PROMPT_PATH`, `DEEPSEEK_BASE_URL`, `DEEPSEEK_JUDGE_MODEL`.
 
 ---
 
-## Architecture
+## 11. Repo map (what every file is)
 
 ```
-sut/          BotRunner (DB-free re-implementation), LLMClient protocol, FakeLLM, OpenAIChat
-metrics/      Three deterministic BaseMetric subclasses (no key)
-judge/        DeepSeekJudge wrapping DeepEvalBaseLLM
-golden/       Golden dataclass + JSONL loader
-evals/        Live eval tests (GEval, ConversationalGEval) — skip without keys
-meta/         Cohen's κ + confusion matrix; judge_validation CLI
-tests/        Offline unit tests for all of the above
-data/         system_prompt.txt (fictional hotel, filled); goldens.jsonl (22 cases)
-results/      judge_validation_{fixture,live}.json + canonical_run.txt (gitignored, written by live runs)
+sut/                          THE SYSTEM UNDER TEST (vendored real bot)
+  hotel_bot/bot.py            faithful copy of hotel-chat-bot/core/bot.py (do not edit logic)
+  hotel_bot/db.py             in-memory stand-in for Supabase (reset/set_history helpers)
+  bot_runner.py               BotRunner: drives the vendored bot; returns BotOutput
+  prompt.py                   load_system_prompt() for judge context
+
+metrics/                      DETERMINISTIC metrics (no key)
+  payment_leak.py             scan_payment_leak + PaymentLeakMetric (headline safety gate)
+  language_fidelity.py        detect_lang + LanguageFidelityMetric (RU/KY heuristic)
+  slot_extraction.py          SlotExtractionMetric (booking slot accuracy)
+
+judge/
+  deepseek_judge.py           DeepSeekJudge: wraps DeepSeek as a DeepEvalBaseLLM
+
+golden/
+  loader.py                   Golden dataclass + load_goldens() over data/goldens.jsonl
+
+evals/                        LIVE eval tests (skip without keys) — these call the SUT + judge
+  test_factual.py             GEval grounding / absent-service / off-topic
+  test_safety.py              deterministic payment gate + GEval red-team
+  test_booking.py             ConversationalGEval multi-turn booking gate + slot check
+  test_language.py            deterministic language-fidelity gate over every live reply
+
+meta/                         "eval of the eval"
+  stats.py                    cohens_kappa + confusion_matrix (pure)
+  judge_validation.py         κ judge-vs-human, split RU/KY; fixture + live modes (CLI)
+
+data/                         system_prompt.txt · goldens.jsonl · judge_validation_set.jsonl
+tests/                        OFFLINE unit tests for everything above (no key, no network)
+docs/superpowers/plans/       the implementation plan this repo was built from
+REPORT.md                     the results write-up (exact numbers + analysis)
 ```
+
+---
+
+## 12. Why DeepEval (vs Promptfoo)
+
+A sibling repo evaluates a RAG expert-finder with **Promptfoo** (YAML/CLI, model A/B grid).
+DeepEval fits *this* project better because:
+
+- **pytest-native** — evals are Python tests; the live grade becomes a CI gate.
+- **Multi-turn** — `ConversationalGEval` / `Turn` grade the full booking dialogue (Promptfoo is weak here).
+- **Pluggable judge** — `DeepEvalBaseLLM` lets us inject DeepSeek as an out-of-family judge.
+
+Same rigor (judge validation via κ), different framework — deliberately, to show both.
+
+---
+
+## 13. Tech stack
+
+Python 3.13 · deepeval 4.0.5 · openai 2.41.0 (used for both the gpt-4o-mini SUT and the
+OpenAI-compatible DeepSeek endpoint) · pytest 8.2 · python-dotenv. CI (`.github/workflows/`)
+runs the offline suite only — no secrets needed.
+
+---
+
+## 14. Limitations / next steps
+
+- Single SUT model (`gpt-4o-mini`); swap and re-run freely.
+- Small by design (22 goldens, 16 validation cases) — finds systematic failures, not tight CI on κ.
+- Heuristic language detector (no-ops on very short/`unknown` inputs rather than false-fail).
+- No prompt-injection / jailbreak suite yet (high-value next addition to the safety set).
+- DeepSeek judge scores via JSON schema (no logprobs) — less calibrated than an OpenAI judge, but keeps the judge out-of-family.
