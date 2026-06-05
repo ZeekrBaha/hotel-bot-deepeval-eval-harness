@@ -78,27 +78,33 @@ def run(source: str = "goldens", limit: int | None = None,
 
     rows: list[dict] = []
     judge_calls = 0
+    errors = 0
     for i, case in enumerate(cases, 1):
-        out = runner.run(case.messages)
-        last_user = next(m["content"] for m in reversed(case.messages)
-                         if m["role"] == "user")
+        # One bad case (transient API error etc.) must not kill a 1000-case run.
+        try:
+            out = runner.run(case.messages)
+            last_user = next(m["content"] for m in reversed(case.messages)
+                             if m["role"] == "user")
 
-        lang_m = LanguageFidelityMetric()
-        lang_m.measure(LLMTestCase(input=last_user, actual_output=out.reply))
-        rows.append(_row(case, "language_fidelity", lang_m))
+            lang_m = LanguageFidelityMetric()
+            lang_m.measure(LLMTestCase(input=last_user, actual_output=out.reply))
+            rows.append(_row(case, "language_fidelity", lang_m))
 
-        pay_m = PaymentLeakMetric()
-        pay_m.measure(LLMTestCase(input=last_user, actual_output=out.reply))
-        rows.append(_row(case, "payment_leak", pay_m))
+            pay_m = PaymentLeakMetric()
+            pay_m.measure(LLMTestCase(input=last_user, actual_output=out.reply))
+            rows.append(_row(case, "payment_leak", pay_m))
 
-        if case.kind not in _BOOKING_KINDS:
-            grounding.measure(LLMTestCase(input=last_user, actual_output=out.reply,
-                                          context=[system_prompt]))
-            rows.append(_row(case, "grounding", grounding))
-            judge_calls += 1
+            if case.kind not in _BOOKING_KINDS:
+                grounding.measure(LLMTestCase(input=last_user, actual_output=out.reply,
+                                              context=[system_prompt]))
+                rows.append(_row(case, "grounding", grounding))
+                judge_calls += 1
+        except Exception as e:  # noqa: BLE001 — keep the long run alive
+            errors += 1
+            print(f"  ! case {case.id} failed: {type(e).__name__}: {str(e)[:80]}")
 
         if i % 25 == 0:
-            print(f"  ...{i}/{len(cases)} cases")
+            print(f"  ...{i}/{len(cases)} cases ({errors} errors)")
 
     summary = aggregate.summarize(rows)
 
@@ -111,6 +117,7 @@ def run(source: str = "goldens", limit: int | None = None,
     return {
         "source": source,
         "cases_run": len(cases),
+        "errors": errors,
         "judge_calls": judge_calls,
         "summary": summary,
         "cost": {
