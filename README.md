@@ -210,9 +210,28 @@ payment) to every case + the judged Grounding metric to non-booking cases, aggre
 `meta.aggregate.summarize` (by kind / language / metric + a failures list), and appends a
 **cost** line. One file in, one report out.
 
-**Cost** (`meta/cost.py`, estimator): judged cases ≈ **$0.46 / 1000**, **$4.62 / 10 000**;
-deterministic metrics are **free**. Each `run_suite` report prints this run's cost and the
-projected cost of the full dataset, so you decide before spending.
+### Cost — by model (`meta/cost.py` estimator)
+
+Two models are billed: the **SUT** `gpt-4o-mini` (one call per case to produce the reply) and
+the **judge** `deepseek-chat` (one call per judged case). The deterministic metrics (payment,
+language, slots) cost **$0**.
+
+| Model | Role | $/1M in | $/1M out | ≈ per call |
+|-------|------|---------|----------|-----------|
+| **gpt-4o-mini** | SUT (bot reply) | $0.15 | $0.60 | ~$0.000153 (≈700 in / 80 out) |
+| **deepseek-chat** | judge | $0.27 | $1.10 | ~$0.000309 (≈900 in / 60 out) |
+
+| Volume | gpt-4o-mini (SUT) | deepseek (judge) | **Total** |
+|--------|-------------------|------------------|-----------|
+| 1 case | $0.00015 | $0.00031 | **$0.00046** |
+| **1 000** | **$0.15** | **$0.31** | **≈ $0.46** |
+| **10 000** | **$1.53** | **$3.09** | **≈ $4.62** |
+
+So for the model we mostly use here — **`gpt-4o-mini` (the SUT) costs ~$0.15 per 1 000 cases and
+~$1.53 per 10 000**; the DeepSeek judge roughly doubles it. If you run only the free deterministic
+gates (no judge), 10 000 cases cost just the **$1.53** of gpt-4o-mini calls. Booking cases skip the
+grounding judge, so a real mixed run is a bit cheaper than these uniform estimates. Every
+`run_suite` report prints this run's cost + the projected full-dataset cost, so you decide before spending.
 
 > Note: the synthetic cases are graded by the *validated* judge (κ=1.0, §5), not by human
 > labels — they measure the bot at volume. The 22 human-curated goldens and the 16-case κ
