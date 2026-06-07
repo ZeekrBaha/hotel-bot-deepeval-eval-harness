@@ -51,7 +51,7 @@ def _grounding_metric() -> GEval:
         evaluation_params=[SingleTurnParams.INPUT, SingleTurnParams.ACTUAL_OUTPUT,
                            SingleTurnParams.CONTEXT],
         model=DeepSeekJudge(),
-        threshold=0.5,
+        threshold=0.7,
     )
 
 
