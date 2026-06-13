@@ -3,10 +3,12 @@ non-booking grounding gate, the error-row path, and the aggregated shape. No
 network — the bot and the judged grounding metric are both faked, and cost math
 is real (pure arithmetic).
 """
+
 import pytest
 
 from golden.loader import Golden
 from evals import run_suite
+from judge.deepseek_judge import JudgeError
 from sut.bot_runner import BotOutput
 
 
@@ -17,8 +19,14 @@ class _FakeRunner:
         pass
 
     def run(self, messages):
-        return BotOutput(reply="ок", is_booking_intent=False, guest_name=None,
-                         check_in=None, check_out=None, num_guests=None)
+        return BotOutput(
+            reply="ок",
+            is_booking_intent=False,
+            guest_name=None,
+            check_in=None,
+            check_out=None,
+            num_guests=None,
+        )
 
 
 class _BoomRunner(_FakeRunner):
@@ -42,12 +50,27 @@ class _FakeGrounding:
 
 def _goldens():
     return [
-        Golden(id="f1", kind="factual", lang="ru",
-               messages=[{"role": "user", "content": "есть ли вай-фай?"}], expected={}),
-        Golden(id="p1", kind="payment_safety", lang="ru",
-               messages=[{"role": "user", "content": "как оплатить?"}], expected={}),
-        Golden(id="b1", kind="booking_complete", lang="ru",
-               messages=[{"role": "user", "content": "хочу бронь"}], expected={}),
+        Golden(
+            id="f1",
+            kind="factual",
+            lang="ru",
+            messages=[{"role": "user", "content": "есть ли вай-фай?"}],
+            expected={},
+        ),
+        Golden(
+            id="p1",
+            kind="payment_safety",
+            lang="ru",
+            messages=[{"role": "user", "content": "как оплатить?"}],
+            expected={},
+        ),
+        Golden(
+            id="b1",
+            kind="booking_complete",
+            lang="ru",
+            messages=[{"role": "user", "content": "хочу бронь"}],
+            expected={},
+        ),
     ]
 
 
@@ -90,3 +113,46 @@ def test_bot_exception_becomes_error_row(monkeypatch):
     assert report["summary"]["by_metric"]["error"]["n"] == 3
     # no deterministic metric rows recorded when the bot blows up before they run
     assert "payment_leak" not in report["summary"]["by_metric"]
+
+
+class _JudgeErrorGrounding(_FakeGrounding):
+    """Stand-in that always raises JudgeError — exercises the judge_error path."""
+
+    def measure(self, tc):
+        raise JudgeError("simulated persistent judge failure")
+
+
+def test_judge_error_is_tracked_separately(monkeypatch):
+    """JudgeError increments judge_errors, not the general errors counter."""
+    monkeypatch.setattr(run_suite, "_grounding_metric", lambda: _JudgeErrorGrounding())
+    report = run_suite.run(source="goldens")
+    # factual + payment_safety are non-booking → both hit the judge → both fail
+    assert report["judge_errors"] == 2
+    assert report["errors"] == 0  # bot errors still 0
+    assert report["judge_error_rate"] > 0.0
+    # judge_error rows should appear in the report
+    assert report["summary"]["by_metric"]["judge_error"]["n"] == 2
+
+
+def test_report_shape_includes_judge_error_keys(monkeypatch):
+    """report always has judge_errors and judge_error_rate keys even when 0."""
+    report = run_suite.run(source="goldens")
+    assert "judge_errors" in report
+    assert "judge_error_rate" in report
+
+
+def test_check_env_vars_exits_on_missing_key(monkeypatch):
+    """_check_env_vars() calls sys.exit when a required key is absent."""
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
+    with pytest.raises(SystemExit) as exc_info:
+        run_suite._check_env_vars(["OPENAI_API_KEY", "DEEPSEEK_API_KEY"])
+    assert "OPENAI_API_KEY" in str(exc_info.value)
+    assert "DEEPSEEK_API_KEY" in str(exc_info.value)
+
+
+def test_check_env_vars_passes_when_all_present(monkeypatch):
+    """_check_env_vars() does nothing when all keys are set."""
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    monkeypatch.setenv("DEEPSEEK_API_KEY", "dk-test")
+    run_suite._check_env_vars(["OPENAI_API_KEY", "DEEPSEEK_API_KEY"])  # must not raise
